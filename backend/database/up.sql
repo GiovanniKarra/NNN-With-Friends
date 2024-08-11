@@ -1,0 +1,11 @@
+CREATE TABLE users (
+	username VARCHAR(255) PRIMARY KEY,
+	password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE sessions (
+	id INT PRIMARY KEY,
+	user VARCHAR(255) NOT NULL,
+	time TIMESTAMP NOT NULL,
+	FOREIGN KEY(user) REFERENCES users(username)
+);
