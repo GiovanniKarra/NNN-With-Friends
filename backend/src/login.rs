@@ -8,6 +8,8 @@ use rocket::{
 };
 use sqlx::{Pool, Sqlite};
 
+use crate::users::{User, get_user};
+
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -23,13 +25,6 @@ pub struct Credentials {
 	username: String,
 	password: String,
 }
-
-#[derive(Serialize)]
-#[serde(crate = "rocket::serde")]
-pub struct User {
-	username: String,
-}
-
 
 #[post("/login", format = "json", data = "<credentials>")]
 pub async fn login(credentials: Option<Json<Credentials>>, cookies: &CookieJar<'_>, db: &State<Pool<Sqlite>>)
@@ -99,17 +94,6 @@ pub async fn logout(cookies: &CookieJar<'_>, db: &State<Pool<Sqlite>>) -> Result
 	Ok("Logged out successfully".to_owned())
 }
 
-async fn get_user(pool: &Pool<Sqlite>, username: &String) -> Option<User> {
-	sqlx::query_as!(
-		User,
-		"SELECT username AS 'username!' FROM users WHERE username = ?;",
-		username
-	)
-	.fetch_optional(pool)
-	.await
-	.unwrap_or(None)
-}
-
 async fn add_user(pool: &Pool<Sqlite>, username: &String, password: &String) -> () {
 	let _ = sqlx::query!(
 		"
@@ -126,7 +110,7 @@ pub async fn authenticate_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>) 
 	let sessionid = cookies
 		.get("sessionid")?
 		.value()
-		.parse::<u32>()
+		.parse::<i64>()
 		.ok()?;
 
 	sqlx::query_as!(
@@ -161,10 +145,10 @@ async fn authenticate_creds(pool: &Pool<Sqlite>, creds: &Credentials) -> Result<
 }
 
 async fn update_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>, user: &User) -> () {
-	let sessionid = random::<u32>();
+	let sessionid = random::<i64>();
 	cookies.add(("sessionid", sessionid.to_string()));
 
-	let time = UNIX_EPOCH.elapsed().unwrap_or_default().as_secs_f64();
+	let time = UNIX_EPOCH.elapsed().unwrap_or_default().as_secs() as i64;
 
 	let _ = sqlx::query!(
 		"
