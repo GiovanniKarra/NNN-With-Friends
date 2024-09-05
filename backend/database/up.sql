@@ -2,26 +2,28 @@ CREATE TABLE users (
 	username VARCHAR(255) PRIMARY KEY,
 	password VARCHAR(255) NOT NULL,
 
-	failedTime TIMESTAMP,
-	failedMsg VARCHAR(255)
+	failed_time BIGINT,
+	failed_msg VARCHAR(255)
 );
 
 CREATE TABLE sessions (
-	id INTEGER PRIMARY KEY,
+	id BIGINT PRIMARY KEY,
 	user VARCHAR(255) NOT NULL,
-	time TIMESTAMP NOT NULL,
+	time BIGINT NOT NULL,
 	FOREIGN KEY(user) REFERENCES users(username)
 );
 
 CREATE TABLE groups (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	name VARCHAR(255) NOT NULL
+	id BIGINT PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	founder VARCHAR(255) NOT NULL,
+	FOREIGN KEY(founder) REFERENCES users(username)
 );
 
-CREATE TABLE groupMembership (
+CREATE TABLE group_membership (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user VARCHAR(255) NOT NULL,
-	groupid INTEGER NOT NULL,
+	groupid BIGINT NOT NULL,
 	FOREIGN KEY(user) REFERENCES users(username),
 	FOREIGN KEY(groupid) REFERENCES groups(id)
 );

@@ -1,4 +1,4 @@
 DROP TABLE users;
 DROP TABLE sessions;
 DROP TABLE groups;
-DROP TABLE groupMembership;
+DROP TABLE group_membership;
