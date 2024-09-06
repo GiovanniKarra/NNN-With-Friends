@@ -1,7 +1,7 @@
 use std::{env, io, path::PathBuf};
 
 use chrono::NaiveDate;
-use groups::create_group_route;
+use groups::{create_group_route, group_join, group_leave};
 use rocket::{fs::{FileServer, NamedFile}, serde::json::Json, State};
 use sqlx::SqlitePool;
 
@@ -54,7 +54,7 @@ async fn rocket() -> _ {
 		.mount("/", routes![index])
 		.mount("/api", routes![login_route, signup, logout, get_time_window])
 		.mount("/api/users", routes![fail, user_status])
-		.mount("/api/groups", routes![create_group_route])
+		.mount("/api/groups", routes![create_group_route, group_join, group_leave])
 		.manage(pool)
 		.manage((start_time, end_time))
 }

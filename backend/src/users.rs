@@ -25,7 +25,9 @@ pub async fn fail(cookies: &CookieJar<'_>, db: &State<Pool<Sqlite>>,
 	message: &str) -> Option<Json<UserStatus>> {
 
 	let username = authenticate_session(db, &cookies).await?.username;
-	fail_user(db, username, message.to_owned(), time_window.0).await.map(|status| Json(status))
+	fail_user(db, username, message.to_owned(), time_window.0)
+		.await
+		.map(|status| Json(status))
 }
 
 #[get("/<username>/status")]
