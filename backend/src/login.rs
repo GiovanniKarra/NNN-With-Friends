@@ -76,12 +76,8 @@ pub async fn signup(credentials: Json<Credentials>, db: &State<Pool<Sqlite>>) ->
 
 #[post("/logout")]
 pub async fn logout(cookies: &CookieJar<'_>, db: &State<Pool<Sqlite>>) -> Result<String, String> {
-	let sessionid = cookies
-		.get("sessionid")
-		.ok_or("couldn't parse sessionid")?
-		.value()
-		.parse::<u32>()
-		.map_err(|_err| "couldn't parse sessionid")?;
+	let sessionid = get_sessionid(cookies)
+		.ok_or("couldn't parse sessionid")?;
 
 	sqlx::query!(
 		"DELETE FROM sessions WHERE id = ?",
@@ -106,12 +102,10 @@ async fn add_user(pool: &Pool<Sqlite>, username: &String, password: &String) -> 
 	.await;
 }
 
+// ->> You should REAAALLY replace this Option with a Result!!!! <<-
+#[deprecated(note="You should REAAALLY replace this Option with a Result")]
 pub async fn authenticate_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>) -> Option<User> {
-	let sessionid = cookies
-		.get("sessionid")?
-		.value()
-		.parse::<i64>()
-		.ok()?;
+	let sessionid = get_sessionid(cookies);
 
 	sqlx::query_as!(
 		User,
@@ -125,7 +119,10 @@ pub async fn authenticate_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>) 
 
 async fn authenticate_creds(pool: &Pool<Sqlite>, creds: &Credentials) -> Result<User, String> {
 	let user = sqlx::query!(
-		"SELECT username as 'username!', password as 'password!' FROM users WHERE username = ?",
+		"
+		SELECT username as 'username!', password as 'password!'
+		FROM users WHERE username = ?
+		",
 		creds.username
 	)
 	.fetch_optional(pool)
@@ -159,4 +156,12 @@ async fn update_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>, user: &Use
 	)
 	.fetch_one(pool)
 	.await;
+}
+
+pub fn get_sessionid(cookies: &CookieJar<'_>) -> Option<i64> {
+	cookies
+		.get("sessionid")?
+		.value()
+		.parse::<i64>()
+		.ok()
 }

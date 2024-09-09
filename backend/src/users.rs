@@ -33,9 +33,9 @@ pub async fn fail(cookies: &CookieJar<'_>, db: &State<Pool<Sqlite>>,
 #[get("/<username>/status")]
 pub async fn user_status(username: &str, db: &State<Pool<Sqlite>>) -> Result<Json<UserStatus>, String> {
 	get_user(db, &username.to_owned())
-	.await
-	.map(|status| Json(status))
-	.ok_or(format!("User '{}' not found", username))
+		.await
+		.map(|status| Json(status))
+		.ok_or(format!("User '{}' not found", username))
 }
 
 pub async fn get_user(pool: &Pool<Sqlite>, username: &String) -> Option<UserStatus> {
