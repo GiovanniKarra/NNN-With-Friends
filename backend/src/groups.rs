@@ -15,7 +15,7 @@ pub struct Group {
 pub async fn create_group_route(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_>, group_name: &str)
 	-> Result<String, String> {
 
-	let user = authenticate_session(db, cookies).await.ok_or("User not found")?;
+	let user = authenticate_session(db, cookies).await?;
 	
 	create_group(db, &group_name.to_owned(), &user.username)
 		.await
@@ -43,9 +43,7 @@ async fn create_group(pool: &Pool<Sqlite>, group_name: &String, founder: &String
 pub async fn group_join(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_>, groupid: i64)
 	-> Result<String, String> {
 	
-	let user = authenticate_session(&db, cookies)
-		.await
-		.ok_or("Couldn't authenticate user".to_owned())?;
+	let user = authenticate_session(&db, cookies).await?;
 
 	group_add_user(&db, groupid, &user.username)
 		.await
@@ -56,9 +54,7 @@ pub async fn group_join(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_>, group
 pub async fn group_leave(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_>, groupid: i64)
 	-> Result<String, String> {
 	
-	let user = authenticate_session(&db, cookies)
-		.await
-		.ok_or("Couldn't authenticate user".to_owned())?;
+	let user = authenticate_session(&db, cookies).await?;
 
 	group_remove_user(&db, groupid, &user.username)
 		.await
@@ -75,8 +71,7 @@ pub async fn group_get_status(db: &State<Pool<Sqlite>>, groupid: i64) -> Result<
 #[get("/myGroups")]
 pub async fn get_user_groups(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_>) -> Result<Json<Vec<Group>>, String> {
 	let username = authenticate_session(db, cookies)
-		.await
-		.ok_or("Couldn't authenticate user")?
+		.await?
 		.username;
 
 	groups_from_user(db, &username)

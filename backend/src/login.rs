@@ -32,7 +32,7 @@ pub async fn login(credentials: Option<Json<Credentials>>, cookies: &CookieJar<'
 
 	let auth = match credentials {
 		Some(cred) => authenticate_creds(db, &cred.0).await,
-		None => authenticate_session(db, cookies).await.ok_or("No session".to_owned()),
+		None => authenticate_session(db, cookies).await,
 	};
 
 	Json(match auth {
@@ -102,9 +102,7 @@ async fn add_user(pool: &Pool<Sqlite>, username: &String, password: &String) -> 
 	.await;
 }
 
-// ->> You should REAAALLY replace this Option with a Result!!!! <<-
-#[deprecated(note="You should REAAALLY replace this Option with a Result")]
-pub async fn authenticate_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>) -> Option<User> {
+pub async fn authenticate_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>) -> Result<User, String> {
 	let sessionid = get_sessionid(cookies);
 
 	sqlx::query_as!(
@@ -114,7 +112,8 @@ pub async fn authenticate_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>) 
 	)
 	.fetch_optional(pool)
 	.await
-	.unwrap_or(None)
+	.map_err(|err| format!("Couldn't authenticate user. {}", err.to_string()))
+	.map(|u| u.ok_or("Couldn't authenticate user. Session not found".to_owned()))?  // is this genius or just unreadable??
 }
 
 async fn authenticate_creds(pool: &Pool<Sqlite>, creds: &Credentials) -> Result<User, String> {

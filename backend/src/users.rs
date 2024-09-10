@@ -24,7 +24,7 @@ pub async fn fail(cookies: &CookieJar<'_>, db: &State<Pool<Sqlite>>,
 	time_window: &State<(i64, i64)>,
 	message: &str) -> Option<Json<UserStatus>> {
 
-	let username = authenticate_session(db, &cookies).await?.username;
+	let username = authenticate_session(db, &cookies).await.ok()?.username;
 	fail_user(db, username, message.to_owned(), time_window.0)
 		.await
 		.map(|status| Json(status))
@@ -46,7 +46,7 @@ pub async fn get_user(pool: &Pool<Sqlite>, username: &String) -> Option<UserStat
 	)
 	.fetch_optional(pool)
 	.await
-	.unwrap_or(None)
+	.ok()?
 }
 
 async fn fail_user(pool: &Pool<Sqlite>, username: String, message: String, start_time: i64)
