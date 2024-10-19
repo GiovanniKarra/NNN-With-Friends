@@ -1,29 +1,33 @@
 <script>
-	import NavBar from "./NavBar.svelte";
-	import LoginPage from "./LoginPage.svelte";
-	import { pageState } from "./stores";
+	import { login } from "./login";
+	import { get_state_from_url, pageState } from "./state";
+    import NavBar from "./NavBar.svelte";
+	import HomePage from "./HomePage.svelte";
+    import LoginPage from "./LoginPage.svelte";
 
-
-	const stateToComponent = {
-		"login": LoginPage
+	let tabs = {
+		"home": HomePage,
+		"groups": LoginPage,
+		"about": LoginPage
 	}
-	let currentPage = "";
 
-	pageState.subscribe(
-		(value) => {
-			window.history.replaceState(value, "", "/"+value.path.join("/"));
-			currentPage = value.path[0];
-		}
-	);
+	let currentTab = get_state_from_url().page
+	let currentArg = get_state_from_url().arg
 
+	pageState.subscribe((newState) => {
+		currentTab = newState.page;
+		currentArg = newState.arg;
+	})
 </script>
 
 <header>
 	<title>NNN With Friends</title>
 </header>
 <main>
-	<NavBar />
-	<svelte:component this={stateToComponent[currentPage]} />
+	<NavBar/>
+	{#key currentTab}{#key currentArg}
+		<svelte:component this={tabs[currentTab]} arg={currentArg}/>
+	{/key}{/key}
 </main>
 
 <style>
