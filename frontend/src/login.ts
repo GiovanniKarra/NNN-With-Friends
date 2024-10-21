@@ -1,13 +1,34 @@
 import { pageState } from "./state";
 
 
-export async function login(username: String, password: String) {
+export async function login(username: String, password: String): Promise<String> {
 	let res = username === ""?
 	await fetch(`/api/login`, { 
 		method: "POST",
 		headers: {"content-type": "application/json"} }
-	): 
+	):
 	await fetch(`/api/login`, { 
+		method: "POST",
+		body: JSON.stringify({ username: username, password: password}),
+		headers: {"content-type": "application/json"} }
+	)
+	let jsonRes = await res.json();
+
+	if (jsonRes.success === false) {
+		pageState.update(
+			(current) => ({...current, user: "" })
+		);
+		return jsonRes.message;
+	} else {
+		pageState.update(
+			(current) => ({...current, user: jsonRes.user })
+		);
+		return "";
+	}
+}
+
+export async function signup(username: String, password: String): Promise<String> {
+	let res = await fetch(`/api/signup`, { 
 		method: "POST",
 		body: JSON.stringify({ username: username, password: password}),
 		headers: {"content-type": "application/json"} }
@@ -17,9 +38,12 @@ export async function login(username: String, password: String) {
 	if (jsonRes.success === false) {
 		return jsonRes.message;
 	} else {
-		pageState.update(
-			(current) => ({...current, path: ["home"], user: jsonRes.user })
-		);
 		return "";
 	}
+}
+
+
+export async function logout() {
+	let res = await fetch("/api/logout", {method: "POST"});
+	return res;
 }

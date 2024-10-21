@@ -8,7 +8,11 @@ export function get_state_from_url() {
 	return {"page": page, "arg": arg === undefined ? "": arg};
 }
 
-export const pageState = writable(get_state_from_url());
+let currentState = get_state_from_url()
+window.history.replaceState(null, null, `/${currentState.page}/${currentState.arg}`)
+
+export const pageState = writable(currentState);
 pageState.subscribe((newState) => {
-	window.history.pushState(null, null, `/${newState.page}/${newState.arg}`)
+	const newPath = `/${newState.page}/${newState.arg}`;
+	window.history.replaceState(null, null, newPath);
 })

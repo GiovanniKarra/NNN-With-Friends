@@ -1,14 +1,18 @@
 <script>
-	import { login } from "./login";
 	import { get_state_from_url, pageState } from "./state";
-    import NavBar from "./NavBar.svelte";
+	import NavBar from "./NavBar.svelte";
 	import HomePage from "./HomePage.svelte";
-    import LoginPage from "./LoginPage.svelte";
+	import LoginPage from "./LoginPage.svelte";
+	import Page404 from "./Page404.svelte";
+	import About from "./About.svelte";
+    import { login } from "./login";
+	
+	login("", "");
 
 	let tabs = {
 		"home": HomePage,
 		"groups": LoginPage,
-		"about": LoginPage
+		"about": About
 	}
 
 	let currentTab = get_state_from_url().page
@@ -24,10 +28,14 @@
 	<title>NNN With Friends</title>
 </header>
 <main>
-	<NavBar/>
-	{#key currentTab}{#key currentArg}
-		<svelte:component this={tabs[currentTab]} arg={currentArg}/>
-	{/key}{/key}
+	{#if $pageState.user === ""}
+		<LoginPage/>
+	{:else}
+		<NavBar/>
+		{#key currentTab}{#key currentArg}
+		<svelte:component this={tabs[currentTab] || Page404} arg={currentArg}/>
+		{/key}{/key}
+	{/if}
 </main>
 
 <style>

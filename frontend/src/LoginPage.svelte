@@ -1,1 +1,43 @@
-<h1>LOGIN PAGE</h1>
+<script>
+    import { login, signup } from "./login";
+
+	let username = ""; let password = "";
+	let createAccount = false;
+	let errorMessage = "";
+</script>
+
+<div class="login-page">
+	<h1>LOGIN PAGE</h1>
+	<div class="login-form">
+		<form>
+			<label for="username">Username</label>
+			<input type="text" placeholder="NNN-Enjoyer-69" required bind:value={username}/>
+			<label for="password">Password</label>
+			<input type="password" required bind:value={password}/>
+			<input type="button" on:click={() => 
+				(createAccount? signup(username, password): login(username, password))
+				.then((msg) => errorMessage = msg.toString())}
+				value="{createAccount? "Sign Up": "Log In"}">
+			<input type="button" on:click={() => createAccount = !createAccount}
+				value="{createAccount? "Log in to an existing account": "Create a new account"}">
+			<p>{errorMessage}</p>
+		</form>
+	</div>
+</div>
+
+<style>
+	.login-page {
+		text-align: center;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+	.login-form {
+		width: 20%;
+	}
+	form {
+		text-align: left;
+		display: flex;
+		flex-flow: column;
+	}
+</style>
