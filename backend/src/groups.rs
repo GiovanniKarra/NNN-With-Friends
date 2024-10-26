@@ -68,15 +68,31 @@ pub async fn group_get_status(db: &State<Pool<Sqlite>>, groupid: i64) -> Result<
 		.map(|u| Json(u))
 }
 
+// this exists because JS is shit
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct AdaptedGroup {
+	id: String,
+	name: String,
+	founder: String
+}
 #[get("/myGroups")]
-pub async fn get_user_groups(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_>) -> Result<Json<Vec<Group>>, String> {
+pub async fn get_user_groups(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_>) -> Result<Json<Vec<AdaptedGroup>>, String> {
 	let username = authenticate_session(db, cookies)
 		.await?
 		.username;
 
+
 	groups_from_user(db, &username)
 		.await
-		.map(|v| Json(v))
+		.map(|v| Json(v
+			.into_iter()
+			.map(|group| AdaptedGroup {
+				id: group.id.to_string(), 
+				name: group.name, 
+				founder: group.founder
+			})
+			.collect::<Vec<AdaptedGroup>>()))
 }
 
 async fn group_add_user(pool: &Pool<Sqlite>, groupid: i64, username: &String)
