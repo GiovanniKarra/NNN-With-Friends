@@ -6,12 +6,13 @@
 	import Page404 from "./Page404.svelte";
 	import About from "./About.svelte";
     import { login } from "./login";
+    import GroupsPage from "./GroupsPage.svelte";
 	
 	login("", "");
 
 	let tabs = {
 		"home": HomePage,
-		"groups": LoginPage,
+		"groups": GroupsPage,
 		"about": About
 	}
 
