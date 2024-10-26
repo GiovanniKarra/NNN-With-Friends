@@ -1,7 +1,7 @@
 import { pageState } from "./state";
 
 
-export async function login(username: String, password: String): Promise<String> {
+export async function login(username: string, password: string): Promise<string> {
 	let res = username === ""?
 	await fetch(`/api/login`, { 
 		method: "POST",
@@ -27,7 +27,7 @@ export async function login(username: String, password: String): Promise<String>
 	}
 }
 
-export async function signup(username: String, password: String): Promise<String> {
+export async function signup(username: string, password: string): Promise<string> {
 	let res = await fetch(`/api/signup`, { 
 		method: "POST",
 		body: JSON.stringify({ username: username, password: password}),
