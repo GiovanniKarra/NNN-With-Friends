@@ -1,12 +1,31 @@
 <script>
-    import { getMyGroups } from "./api";
+    import { createGroup, getMyGroups, joinGroup } from "./api";
     import { pageState } from "./state";
 
 	export let currentGroupID = "";
+	let creatingGroup = false;
+	let newGroupName = "";
+	let errorMsg = "";
 </script>
 
 
 <div class="group-selection-bar">
+	{#if creatingGroup}
+		<input type="text" bind:value={newGroupName}>
+		<button on:click={() => {
+			createGroup(newGroupName).then((result) => {
+				if (!result.success) errorMsg = result.groupid;
+				else joinGroup(result.groupid).then(() => creatingGroup = false);
+			})
+		}}>
+			go
+		</button>
+		<p>{errorMsg}</p>
+	{:else}
+		<button on:click={() => creatingGroup = true}>
+			+ Create
+		</button>
+	{/if}
 	{#await getMyGroups() then groups}
 		{#each groups as group}
 			<button
@@ -23,5 +42,8 @@
 	.group-selection-bar {
 		width: 20%;
 		background-color: gray;
-	}	
+	}
+	button {
+		width: 100%;
+	}
 </style>
