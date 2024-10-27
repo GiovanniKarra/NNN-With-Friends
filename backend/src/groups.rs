@@ -25,7 +25,7 @@ pub async fn create_group_route(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_
 async fn create_group(pool: &Pool<Sqlite>, group_name: &String, founder: &String)
 	-> Result<Group, String> {
 	
-	let id = rand::random::<i64>();
+	let id = rand::random::<i64>().abs();
 
 	sqlx::query!(
 		"INSERT INTO groups (id, name, founder) VALUES (?, ?, ?);",
@@ -98,14 +98,30 @@ pub async fn get_user_groups(db: &State<Pool<Sqlite>>, cookies: &CookieJar<'_>) 
 async fn group_add_user(pool: &Pool<Sqlite>, groupid: i64, username: &String)
 	-> Result<(), String> {
 	
-	sqlx::query!(
-		"INSERT INTO group_membership (user, groupid) VALUES (?, ?);",
+	let data = sqlx::query!(
+		"SELECT user, groupid FROM group_membership
+		WHERE user = ? AND groupid = ?;",
 		username, groupid
 	)
-	.execute(pool)
+	.fetch_one(pool)
 	.await
-	.map(|_| ())
-	.map_err(|_| format!("Internal error. Couldn't add {} to group {}", username, groupid))
+	.ok();
+
+	match data {
+		Some(_) => Err("User already in group".to_string()),
+		None => {
+			sqlx::query!(
+				"INSERT INTO group_membership (user, groupid) VALUES (?, ?);",
+				username, groupid
+			)
+			.execute(pool)
+			.await
+			.map(|_| ())
+			.map_err(|_| format!("Internal error. Couldn't add {} to group {}", 
+									username, groupid))
+		}
+	}
+	
 }
 
 async fn group_remove_user(pool: &Pool<Sqlite>, groupid: i64, username: &String)
@@ -144,7 +160,7 @@ async fn groups_from_user(pool: &Pool<Sqlite>, username: &String) -> Result<Vec<
 		Group,
 		"
 		SELECT groups.id as 'id!', name, founder
-		FROM groups INNER JOIN group_membership
+		FROM groups INNER JOIN group_membership ON groups.id = group_membership.groupid
 		WHERE group_membership.user = ?;
 		",
 		username

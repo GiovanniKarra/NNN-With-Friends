@@ -26,16 +26,18 @@
 			+ Create
 		</button>
 	{/if}
-	{#await getMyGroups() then groups}
-		{#each groups as group}
-			<button
-				on:click={() => pageState.update((current) => ({...current, arg: group.id}))}
-				disabled="{currentGroupID == group.id}">
-				{group.name} <br>
-				<small>by {group.founder}</small>
-			</button>
-		{/each}
-	{/await}
+	{#key [creatingGroup, currentGroupID]}
+		{#await getMyGroups() then groups}
+			{#each groups as group}
+				<button
+					on:click={() => pageState.update((current) => ({...current, arg: group.id}))}
+					disabled="{currentGroupID == group.id}">
+					{group.name} <br>
+					<small>by {group.founder}</small>
+				</button>
+			{/each}
+		{/await}
+	{/key}
 </div>
 
 <style>

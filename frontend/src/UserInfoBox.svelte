@@ -20,5 +20,7 @@
 		border-radius: 10px;
 		padding: 10px;
 		margin: 20px;
+		height: 200px;
+		width: 200px;
 	}
 </style>
