@@ -1,6 +1,6 @@
 <script>
 	import NavButton from "./NavButton.svelte";
-	const tabs = ["home", "groups", "about"]
+	export let tabs = [];
 
 </script>
 

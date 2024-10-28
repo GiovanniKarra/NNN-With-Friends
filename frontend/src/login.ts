@@ -21,7 +21,7 @@ export async function login(username: string, password: string): Promise<string>
 		return jsonRes.message;
 	} else {
 		pageState.update(
-			(current) => ({...current, user: jsonRes.user })
+			(current) => ({...current, user: jsonRes.user.username })
 		);
 		return "";
 	}

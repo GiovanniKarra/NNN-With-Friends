@@ -7,12 +7,14 @@
 	import About from "./About.svelte";
     import { login } from "./login";
     import GroupsPage from "./GroupsPage.svelte";
+    import ProfilePage from "./ProfilePage.svelte";
 	
 	login("", "");
 
 	let tabs = {
 		"home": HomePage,
 		"groups": GroupsPage,
+		"profile": ProfilePage,
 		"about": About
 	}
 
@@ -32,7 +34,7 @@
 	{#if $pageState.user === ""}
 		<LoginPage/>
 	{:else}
-		<NavBar/>
+		<NavBar tabs={Object.keys(tabs)}/>
 		{#key currentTab}{#key currentArg}
 		<svelte:component this={tabs[currentTab] || Page404} arg={currentArg}/>
 		{/key}{/key}

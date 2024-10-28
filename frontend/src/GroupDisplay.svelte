@@ -8,7 +8,7 @@
 <div class="group-users-display">
 	{#await getGroupStatus(currentGroupID) then users}
 		{#each users as user}
-			<UserInfoBox user={user}/>
+			<UserInfoBox user={{...user, failed: false}}/>
 		{/each}
 	{/await}
 </div>
