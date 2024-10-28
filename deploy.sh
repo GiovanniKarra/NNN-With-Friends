@@ -20,6 +20,6 @@ sh dbreset.sh
 cd ../../..
 
 cd build
-scp -r * giogio@192.168.1.29:NNN-With-Friends
+scp -r * 192.168.1.29:NNN-With-Friends
 
-echo "cd NNN-With-Friends/backend; ./server" | ssh giogio@192.168.1.29
+echo "cd NNN-With-Friends/backend && pkill server; ./server" | ssh 192.168.1.29
