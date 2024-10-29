@@ -1,5 +1,5 @@
 <script>
-    import { createGroup, getMyGroups, joinGroup } from "./api";
+    import { createGroup, getMyGroups, joinGroup, leaveGroup } from "./api";
     import { pageState } from "./state";
 
 	export let currentGroupID = "";
@@ -34,6 +34,17 @@
 					disabled="{currentGroupID == group.id}">
 					{group.name} <br>
 					<small>by {group.founder}</small>
+				</button>
+				<button
+					style="background-color: red;"
+					on:click={() => {
+						let yes = confirm(`Are you sure you want to quit ${group.name}?`);
+						if (!yes) return;
+						if (currentGroupID == group.id)
+							pageState.update((current) => ({...current, arg:""}))
+						leaveGroup(group.id);
+					}}>
+					X
 				</button>
 			{/each}
 		{/await}

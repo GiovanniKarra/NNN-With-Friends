@@ -11,28 +11,30 @@
 	onDestroy(() => clearInterval(interval));
 
 	let displayText = "";
+	let timer = "";
 	$: {
 		if (currentTime < timeInterval[0]) {
 			let diff = timeInterval[0]-currentTime;
 			let time = timeLeft(diff);
-			displayText = `Time left until No Nut November\n
-				${time.days}:${time.hours}:${time.minutes}:${time.seconds}`;
+			displayText = "Time left until No Nut November";
+			timer = `${time.days}:${time.hours}:${time.minutes}:${time.seconds}`;
 		}
 		else if (currentTime < timeInterval[1]) {
 			let diff = timeInterval[1]-currentTime;
 			let time = timeLeft(diff);
-			displayText = `Time left until the end of No Nut November\n
-				${time.days}:${time.hours}:${time.minutes}:${time.seconds}`;
+			displayText = "Time left until the end of No Nut November";
+			timer = `${time.days}:${time.hours}:${time.minutes}:${time.seconds}`;
 		}
 		else {
 			let diff = currentTime-timeInterval[1];
 			let time = timeLeft(diff);
-			displayText = `Time since the end of No Nut November\n
-				${time.days}:${time.hours}:${time.minutes}:${time.seconds}`;
+			displayText = "Time since the end of No Nut November";
+			timer = `${time.days}:${time.hours}:${time.minutes}:${time.seconds}`;
 		}
 	}
 </script>
 
 
 <h1>HOME PAGE</h1>
-<p>{displayText}</p>
+<h3>{displayText}</h3>
+<h2>{timer}</h2>

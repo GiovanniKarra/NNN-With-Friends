@@ -28,6 +28,10 @@ export async function joinGroup(groupid: string): Promise<{success: boolean, mes
 	return {success: res.ok, message: await res.text()}
 }
 
+export async function leaveGroup(groupid: string) {
+	await fetch(`/api/groups/${groupid}/leave`, {method: "POST"});
+}
+
 export async function getMyGroups(): Promise<Array<{id: string, name: string, founder: string}>> {
 	let res = await fetch(`/api/groups/myGroups`);
 	return await res.json();
