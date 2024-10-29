@@ -42,3 +42,8 @@ export async function fail(message: string): Promise<{failed: boolean, failed_ti
 		failed_msg: resJSON.failed_msg
 	}
 }
+
+export async function getTimeInterval(): Promise<[number, number]> {
+	let res = await fetch(`/api/timeWindow`);
+	return await res.json();
+}

@@ -1,18 +1,19 @@
 <script>
+	import { failTimeToString } from "./misc";
+
 	export let user = {
 		username: "",
 		failed: false,
 		failed_time: 0,
 		failed_msg: ""
 	};
-	$: failDate = new Date(user.failed_time);
 	$: user.failed = user.failed_time > 0;
 </script>
 
 <div class={user.failed? "failed": "user-info-box"}>
 	<p>{user.username}</p>
 	{#if user.failed}
-		<p>failed {failDate.toUTCString()}</p>
+		<p>{failTimeToString(user.failed_time)}</p>
 		<p>{user.failed_msg}</p>
 	{/if}
 </div>
