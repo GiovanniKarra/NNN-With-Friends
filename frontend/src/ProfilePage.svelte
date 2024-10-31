@@ -1,6 +1,7 @@
 <script>
-    import { fail, getStatus } from "./api";
-    import { pageState } from "./state";
+	import { fail, getStatus } from "./api";
+    import { failTimeToString } from "./misc";
+	import { pageState } from "./state";
 
 	let user = {
 		username: "",
@@ -8,23 +9,24 @@
 		failed_time: 0,
 		failed_msg: ""
 	};
+	let failMessage = "";
 	pageState.subscribe((state) => {
 		user.username = state.user;
 		getStatus(user.username).then((u) => user = {...user, ...u});
 	});
-	$: console.log(user);
-	let failMessage = "";
 </script>
 
 <div class="profile-page">
-	<h1>{user.username}</h1>
-	{#if user.failed}
-		<p>Failed on {new Date(user.failed_time).toUTCString()}</p>
-		<p>This is what they had to say: {user.failed_msg}</p>
-	{:else}
-		<input type="text" placeholder="It was too hard :((" bind:value={failMessage}>
-		<button on:click={() => fail(failMessage).then((newStatus) => user = {...user, ...newStatus})}>
-			I failed
-		</button>
+	{#if user.failed_time > 0}
+		<h1>{user.username}</h1>
+		{#if user.failed}
+			<p>{failTimeToString(user.failed_time)}</p>
+			<p>This is what you had to say: {user.failed_msg}</p>
+		{:else}
+			<input type="text" placeholder="It was too hard :((" bind:value={failMessage}>
+			<button on:click={() => fail(failMessage).then((newStatus) => user = {...user, ...newStatus})}>
+				I failed
+			</button>
+		{/if}
 	{/if}
 </div>

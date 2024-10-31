@@ -6,7 +6,7 @@ export function failTimeToString(failTimeSeconds: number): string {
 	return `Failed after ${days} days and ${hoursLeft} hours.`
 }
 
-export function timeLeft(diff: number): {days: number, hours: number, minutes: number, seconds: number} {
+function timeLeft(diff: number): {days: number, hours: number, minutes: number, seconds: number} {
 	let days = Math.floor(diff/3600/24);
 	let hours = Math.floor(diff/3600 % 24);
 	let minutes = Math.floor(diff/60 % 60);
@@ -17,4 +17,9 @@ export function timeLeft(diff: number): {days: number, hours: number, minutes: n
 		minutes: minutes,
 		seconds: seconds
 	}
+}
+
+export function getTimer(diff: number): string {
+	let time = timeLeft(diff);
+	return `${time.days.toString().padStart(2, "0")}:${time.hours.toString().padStart(2, "0")}:${time.minutes.toString().padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}`;
 }

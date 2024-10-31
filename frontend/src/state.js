@@ -5,7 +5,7 @@ export function get_state_from_url() {
 	let pathString = window.location.pathname.replace(/^\//, "").replace(/\/$/, "");
 	let path = pathString === ""? ["home", ""] : pathString.split("/");
 	let page = path[0]; let arg = path[1];
-	return {"page": page, "arg": arg === undefined ? "": arg, "user": ""};
+	return {"page": page, "arg": arg === undefined ? "": arg, "user": "", "interval": [0, 0]};
 }
 
 let currentState = get_state_from_url()
@@ -15,4 +15,4 @@ export const pageState = writable(currentState);
 pageState.subscribe((newState) => {
 	const newPath = `/${newState.page}/${newState.arg}`;
 	window.history.replaceState(null, null, newPath);
-})
+});

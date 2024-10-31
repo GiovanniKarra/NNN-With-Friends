@@ -2,9 +2,9 @@
 	import { onDestroy } from "svelte";
 	import { getTimeInterval } from "./api";
 	import { getTimer } from "./misc";
+    import { pageState } from "./state";
 
-	let timeInterval = [0, 0];
-	getTimeInterval().then((res) => timeInterval = res);
+	let timeInterval = $pageState.interval;
 
 	let currentTime = Math.floor(Date.now()/1000);
 	const interval = setInterval(() => {
@@ -33,6 +33,8 @@
 </script>
 
 <div class="timer">
-	<h3>{displayText}</h3>
-	<h2>{timer}</h2>
+	{#if timeInterval[0] !== 0}
+		<h3>{displayText}</h3>
+		<h2>{timer}</h2>
+	{/if}
 </div>

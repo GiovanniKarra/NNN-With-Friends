@@ -5,11 +5,10 @@
 	import LoginPage from "./LoginPage.svelte";
 	import Page404 from "./Page404.svelte";
 	import About from "./About.svelte";
-    import { login } from "./login";
-    import GroupsPage from "./GroupsPage.svelte";
-    import ProfilePage from "./ProfilePage.svelte";
-	
-	login("", "");
+	import { login } from "./login";
+	import GroupsPage from "./GroupsPage.svelte";
+	import ProfilePage from "./ProfilePage.svelte";
+	import { getTimeInterval } from "./api";
 
 	let tabs = {
 		"home": HomePage,
@@ -25,22 +24,35 @@
 		currentTab = newState.page;
 		currentArg = newState.arg;
 	})
+
+	async function preps() {
+		await login("", "");
+		let ret = await getTimeInterval();
+		pageState.update((current) => ({...current, interval: ret}));
+		return ret;
+	}
 </script>
 
-<header>
+<head>
 	<title>NNN With Friends</title>
-</header>
+</head>
 <main>
-	{#if $pageState.user === ""}
-		<LoginPage/>
-	{:else}
-		<NavBar tabs={Object.keys(tabs)}/>
-		{#key currentTab}{#key currentArg}
-		<svelte:component this={tabs[currentTab] || Page404} arg={currentArg}/>
-		{/key}{/key}
-	{/if}
+	{#await preps() then _}
+		{#if $pageState.user === ""}
+			<LoginPage/>
+		{:else}
+			<NavBar tabs={Object.keys(tabs)}/>
+			{#key currentTab}{#key currentArg}
+			<svelte:component this={tabs[currentTab] || Page404} arg={currentArg}/>
+			{/key}{/key}
+		{/if}
+	{/await}
 </main>
 
 <style>
-	
+	main {
+		padding: 0;
+		margin: 0;
+		transform: translateY(200);
+	}
 </style>

@@ -49,5 +49,9 @@ export async function fail(message: string): Promise<{failed: boolean, failed_ti
 
 export async function getTimeInterval(): Promise<[number, number]> {
 	let res = await fetch(`/api/timeWindow`);
-	return await res.json();
+	let interval = await res.json();
+	let offset = new Date().getTimezoneOffset();
+	interval[0] += offset*60;
+	interval[1] += offset*60;
+	return interval;
 }
