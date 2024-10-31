@@ -12,6 +12,7 @@
 		user.username = state.user;
 		getStatus(user.username).then((u) => user = {...user, ...u});
 	});
+	$: console.log(user);
 	let failMessage = "";
 </script>
 

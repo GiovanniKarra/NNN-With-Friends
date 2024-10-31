@@ -2,7 +2,7 @@ export async function getStatus(username: string): Promise<{failed: boolean, fai
 	let res = await fetch(`/api/users/${username}/status`);
 	let resJSON = await res.json();
 	return {
-		failed: resJSON.failed_time !== undefined,
+		failed: resJSON.failed_time !== null,
 		failed_time: resJSON.failed_time,
 		failed_msg: resJSON.failed_msg
 	}
