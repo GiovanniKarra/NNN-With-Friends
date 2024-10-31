@@ -14,7 +14,7 @@
 					unknownGroup = false;
 				}
 			});
-			if (unknownGroup) joinGroup(arg);
+			if (unknownGroup && arg !== "") joinGroup(arg);
 		})
 	}
 </script>
