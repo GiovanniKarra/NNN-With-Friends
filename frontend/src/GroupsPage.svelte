@@ -21,7 +21,6 @@
 
 
 <div class="groups-page">
-	<h1>GROUPS</h1>
 	<div class="vertical-split">
 		<GroupSelectionBar currentGroupID={arg}/>
 		<GroupDisplay currentGroupID={arg}/>

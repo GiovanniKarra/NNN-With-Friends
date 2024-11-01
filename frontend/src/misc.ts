@@ -23,3 +23,7 @@ export function getTimer(diff: number): string {
 	let time = timeLeft(diff);
 	return `${time.days.toString().padStart(2, "0")}:${time.hours.toString().padStart(2, "0")}:${time.minutes.toString().padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}`;
 }
+
+export function pressedEnter(event, callback) {
+	if (event.key === "Enter") callback();
+}

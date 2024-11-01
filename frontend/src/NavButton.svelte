@@ -15,3 +15,9 @@
 		{name}
 	</button>
 </div>
+
+<style>
+	button {
+		border-radius: 0;
+	}
+</style>
