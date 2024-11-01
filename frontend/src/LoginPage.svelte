@@ -18,10 +18,10 @@
 		<form>
 			<label for="username">Username</label>
 			<input type="text" placeholder="NNN-Enjoyer-69" required bind:value={username}
-				on:keydown={(e) => pressedEnter(e, goButton)}/>
+				on:keydown={(e) => pressedEnter(e, goButton)} maxlength="32"/>
 			<label for="password">Password</label>
 			<input type="password" required bind:value={password}
-				on:keydown={(e) => pressedEnter(e, goButton)}/>
+				on:keydown={(e) => pressedEnter(e, goButton)} maxlength="64"/>
 			<input type="button" on:click={goButton}
 				value="{createAccount? "Sign Up": "Log In"}">
 			<input type="button" on:click={() => createAccount = !createAccount}
