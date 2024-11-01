@@ -3,15 +3,25 @@
     import { pageState } from "./state";
     import UserInfoBox from "./UserInfoBox.svelte";
 
-	$: currentGroupID = $pageState.arg;
+	let currentGroupID = "";
+	let users = [];
+	updateUsers();
+	pageState.subscribe((state) => {
+		currentGroupID = state.arg;
+		updateUsers();
+	});
+
+	async function updateUsers() {
+		users = currentGroupID === ""? []: await getGroupStatus(currentGroupID);
+	}
 </script>
 
 <div class="group-users-display">
-	{#await getGroupStatus(currentGroupID) then users}
+	{#if users.length > 0}
 		{#each users as user}
 			<UserInfoBox user={{...user, failed: false}}/>
 		{/each}
-	{/await}
+	{/if}
 </div>
 
 <style>

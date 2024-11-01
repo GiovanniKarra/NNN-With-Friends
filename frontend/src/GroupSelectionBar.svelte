@@ -18,8 +18,9 @@
 				}
 			});
 			if (unknownGroup && currentGroupID !== "") {
-				joinGroup(currentGroupID);
-				updateGroups();
+				joinGroup(currentGroupID).then(() => {
+					updateGroups().then(() => pageState.update((s) => s));
+				});
 			}
 		}
 	}
