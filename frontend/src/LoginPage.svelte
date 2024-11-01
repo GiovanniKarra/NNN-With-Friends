@@ -35,12 +35,10 @@
 	.login-page {
 		text-align: center;
 		display: flex;
-		align-items: center;
 		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 		width: 100%;
-	}
-	.login-form {
-		width: 20%;
 	}
 	form {
 		text-align: left;
