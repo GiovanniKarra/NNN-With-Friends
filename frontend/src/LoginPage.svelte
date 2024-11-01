@@ -1,9 +1,15 @@
 <script>
     import { login, signup } from "./login";
+    import { pressedEnter } from "./misc";
 
 	let username = ""; let password = "";
 	let createAccount = false;
 	let errorMessage = "";
+
+	function goButton() {
+		(createAccount? signup(username, password): login(username, password))
+		.then((msg) => errorMessage = msg.toString())
+	}
 </script>
 
 <div class="login-page">
@@ -14,9 +20,7 @@
 			<input type="text" placeholder="NNN-Enjoyer-69" required bind:value={username}/>
 			<label for="password">Password</label>
 			<input type="password" required bind:value={password}/>
-			<input type="button" on:click={() => 
-				(createAccount? signup(username, password): login(username, password))
-				.then((msg) => errorMessage = msg.toString())}
+			<input type="button" on:click={goButton} on:keydown={(e) => pressedEnter(e, goButton)}
 				value="{createAccount? "Sign Up": "Log In"}">
 			<input type="button" on:click={() => createAccount = !createAccount}
 				value="{createAccount? "Log in to an existing account": "Create a new account"}">

@@ -1,6 +1,5 @@
 <script>
 	import { onDestroy } from "svelte";
-	import { getTimeInterval } from "./api";
 	import { getTimer } from "./misc";
     import { pageState } from "./state";
 
@@ -34,7 +33,18 @@
 
 <div class="timer">
 	{#if timeInterval[0] !== 0}
-		<h3>{displayText}</h3>
-		<h2>{timer}</h2>
+		<h1>{displayText}</h1>
+		<div class="time">
+			<h1>{timer}</h1>
+		</div>
 	{/if}
 </div>
+
+<style>
+	.timer {
+		text-align: center;
+	}
+	.time {
+		font-size: 400%;
+	}
+</style>

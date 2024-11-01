@@ -53,6 +53,5 @@
 	main {
 		padding: 0;
 		margin: 0;
-		transform: translateY(200);
 	}
 </style>

@@ -70,11 +70,7 @@ body {
 
 footer,
 header,
-main {
-    margin: 0 auto;
-    max-width: var(--width-content);
-    padding: 3rem 1rem;
-}
+main,
 
 hr {
     background-color: var(--color-bg-secondary);
