@@ -31,7 +31,7 @@
 		<p>{errorMsg}</p>
 	{/if}
 {:else}
-	<button on:click={() => creatingGroup = true}>
+	<button on:click={() => creatingGroup = true} style="border-radius: 0;">
 		+ Create
 	</button>
 {/if}
