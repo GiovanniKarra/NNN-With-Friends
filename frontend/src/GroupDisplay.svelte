@@ -1,8 +1,9 @@
 <script>
     import { getGroupStatus } from "./api";
+    import { pageState } from "./state";
     import UserInfoBox from "./UserInfoBox.svelte";
 
-	export let currentGroupID = "";
+	$: currentGroupID = $pageState.arg;
 </script>
 
 <div class="group-users-display">

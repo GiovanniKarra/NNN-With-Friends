@@ -1,6 +1,6 @@
 <script>
 	import { fail, getStatus } from "./api";
-    import { failTimeToString } from "./misc";
+    import { failTimeToString, pressedEnter } from "./misc";
 	import { pageState } from "./state";
 
 	let user = {
@@ -11,9 +11,14 @@
 	};
 	let failMessage = "";
 	pageState.subscribe((state) => {
-		user.username = state.user;
-		getStatus(user.username).then((u) => user = {...user, ...u});
+		getStatus(state.user).then((u) => {
+			user = {...user, ...u};
+			user.username = state.user;
+		});
 	});
+	function sendFail() {
+		fail(failMessage).then((newStatus) => user = {...user, ...newStatus});
+	}
 </script>
 
 <div class="profile-page">
@@ -25,10 +30,9 @@
 		{:else}
 			<div class="fail-input">
 				<input type="text" placeholder="It was too hard :((" bind:value={failMessage}
-					style="margin:0;" maxlength="80">
-				<button on:click={() =>
-					fail(failMessage).then((newStatus) => user = {...user, ...newStatus})}
-					style="margin:0;">
+					style="margin:0;" maxlength="80"
+					on:keydown={(e) => pressedEnter(e, sendFail)}>
+				<button on:click={sendFail} style="margin:0;">
 					I failed
 				</button>
 			</div>
@@ -42,6 +46,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		text-align: center;
 		width: 100%;
 	}
 	.fail-input {

@@ -3,7 +3,7 @@
     import { pressedEnter } from "./misc";
     import { pageState } from "./state";
 
-	export let currentGroupID = "";
+	$: currentGroupID = $pageState.arg;
 	let creatingGroup = false;
 	let newGroupName = "";
 	let errorMsg = "";
@@ -28,15 +28,15 @@
 
 <div class="group-selection-bar">
 	{#if creatingGroup}
-	<div class="duo">
-		<input type="text" bind:value={newGroupName}
-			on:keydown={(event) => pressedEnter(event, newGroup)}>
-		<button on:click={newGroup} style="width: 20%; padding-left: 16px;">
-			New
-		</button>
-	</div>
+		<div class="duo">
+			<input type="text" bind:value={newGroupName}
+				on:keydown={(event) => pressedEnter(event, newGroup)}>
+			<button on:click={newGroup} style="width: 20%; padding-left: 16px;">
+				New
+			</button>
+		</div>
 		{#if errorMsg.length > 0}
-		<p>{errorMsg}</p>
+			<p>{errorMsg}</p>
 		{/if}
 	{:else}
 		<button on:click={() => creatingGroup = true}>
@@ -58,7 +58,7 @@
 			</button>
 			<button
 				on:click={() => pageState.update((current) => ({...current, arg: group.id}))}
-				disabled="{currentGroupID == group.id}">
+				disabled="{currentGroupID === group.id}">
 				{group.name} <br>
 				<small>by {group.founder}</small>
 			</button>

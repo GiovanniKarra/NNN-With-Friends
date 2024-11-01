@@ -1,12 +1,14 @@
 export function failTimeToString(failTimeSeconds: number): string {
+	failTimeSeconds -= new Date().getTimezoneOffset()*60;
 	let hours = Math.floor(failTimeSeconds/3600);
 	let hoursLeft = hours % 24;
 	let days = Math.floor(hours/24);
 
-	return `Failed after ${days} days and ${hoursLeft} hours.`
+	return `Failed after ${days} days and ${hoursLeft} hours`
 }
 
 export function successToString(failTimeSeconds: number): string {
+	failTimeSeconds -= new Date().getTimezoneOffset()*60;
 	let hours = Math.floor(failTimeSeconds/3600);
 	let hoursLeft = hours % 24;
 	let days = Math.floor(hours/24);
