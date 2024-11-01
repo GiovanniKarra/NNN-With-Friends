@@ -12,9 +12,10 @@
 		on:click={() => {
 			let yes = confirm(`Are you sure you want to quit ${group.name}?`);
 			if (!yes) return;
-			if (currentGroupID === group.id)
-				pageState.update((current) => ({...current, arg:""}))
-			leaveGroup(group.id);
+			leaveGroup(group.id).then(() => {
+				pageState.update((current) =>
+					({...current, arg:currentGroupID === group.id? "": current.arg}))
+			});
 		}}>
 		X
 	</button>

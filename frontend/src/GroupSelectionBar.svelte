@@ -7,9 +7,10 @@
 	$: currentGroupID = $pageState.arg;
 
 	let groups = [];
+	let groupsUpdated = false;
 	updateGroups();
 	$: {
-		if (groups.length > 0) {
+		if (groupsUpdated) {
 			let unknownGroup = true;
 			groups.forEach((group) => {
 				if (group.id == currentGroupID) {
@@ -25,7 +26,9 @@
 
 	async function updateGroups() {
 		groups = await getMyGroups();
+		groupsUpdated = true;
 	}
+	pageState.subscribe((_) => updateGroups());
 </script>
 
 
