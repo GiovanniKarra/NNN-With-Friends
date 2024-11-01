@@ -43,8 +43,10 @@
 <style>
 	.timer {
 		text-align: center;
+		max-width: 100%;
 	}
 	.time {
-		font-size: 400%;
+		word-wrap: break-word;
+		font-size: 5vw;
 	}
 </style>
