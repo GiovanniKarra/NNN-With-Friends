@@ -68,7 +68,7 @@
 
 <style>
 	.group-selection-bar {
-		width: 30%;
+		width: 20%;
 		/* background-color: gray; */
 	}
 	.duo {

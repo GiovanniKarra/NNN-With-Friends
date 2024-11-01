@@ -1,5 +1,6 @@
 <script>
-	import { failTimeToString } from "./misc";
+	import { failTimeToString, successToString } from "./misc";
+    import { pageState } from "./state";
 
 	export let user = {
 		username: "",
@@ -11,10 +12,12 @@
 </script>
 
 <div class={user.failed? "failed": "user-info-box"}>
-	<p>{user.username}</p>
+	<p><strong>{user.username}</strong></p>
 	{#if user.failed}
 		<p>{failTimeToString(user.failed_time)}</p>
-		<p>{user.failed_msg}</p>
+		<p>"{user.failed_msg}"</p>
+	{:else}
+		<p>{successToString(Math.floor(Date.now()/1000) - $pageState.interval[0])}</p>
 	{/if}
 </div>
 
@@ -26,7 +29,8 @@
 		margin: 20px;
 		height: 200px;
 		width: 200px;
-		background-color: green;
+		background-color: var(--color-table);
+		text-align: center;
 	}
 	.failed {
 		border: 1px solid;
@@ -36,5 +40,6 @@
 		height: 200px;
 		width: 200px;
 		background-color: red;
+		text-align: center;
 	}
 </style>
