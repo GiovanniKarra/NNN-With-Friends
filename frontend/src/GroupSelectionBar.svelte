@@ -2,7 +2,6 @@
     import { createGroup, getMyGroups, joinGroup, leaveGroup } from "./api";
     import CreateGroupInput from "./CreateGroupInput.svelte";
     import GroupButton from "./GroupButton.svelte";
-    import { pressedEnter } from "./misc";
     import { pageState } from "./state";
 
 	$: currentGroupID = $pageState.arg;
@@ -12,6 +11,20 @@
 
 	let groups = [];
 	updateGroups();
+	$: {
+		if (groups.length > 0) {
+			let unknownGroup = true;
+			groups.forEach((group) => {
+				if (group.id == currentGroupID) {
+					unknownGroup = false;
+				}
+			});
+			if (unknownGroup && currentGroupID !== "") {
+				joinGroup(currentGroupID);
+				updateGroups();
+			}
+		}
+	}
 
 	function newGroup() {
 		createGroup(newGroupName).then((result) => {

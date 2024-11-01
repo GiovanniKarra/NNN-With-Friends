@@ -21,7 +21,7 @@
 	let currentArg = get_state_from_url().arg
 
 	pageState.subscribe((newState) => {
-		currentTab = newState.page;
+		if (currentTab !== newState.page) currentTab = newState.page;
 		currentArg = newState.arg;
 	})
 
@@ -42,9 +42,7 @@
 			<LoginPage/>
 		{:else}
 			<NavBar tabs={Object.keys(tabs)}/>
-			{#key currentTab}{#key currentArg}
-			<svelte:component this={tabs[currentTab] || Page404} arg={currentArg}/>
-			{/key}{/key}
+			<svelte:component this={tabs[currentTab] || Page404}/>
 		{/if}
 	{/await}
 </main>

@@ -34,6 +34,7 @@ export async function leaveGroup(groupid: string) {
 
 export async function getMyGroups(): Promise<Array<{id: string, name: string, founder: string}>> {
 	let res = await fetch(`/api/groups/myGroups`);
+	console.log("yep, it was used");
 	return await res.json();
 }
 
