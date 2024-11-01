@@ -19,6 +19,12 @@
 	.vertical-split {
 		display: flex;
 		flex-direction: row;
-		flex-wrap: wrap;
+	}
+	@media (max-width: 500px) {
+		.vertical-split {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
 	}
 </style>

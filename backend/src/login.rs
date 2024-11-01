@@ -30,9 +30,13 @@ pub struct Credentials {
 pub async fn login(credentials: Option<Json<Credentials>>, cookies: &CookieJar<'_>, db: &State<Pool<Sqlite>>)
 	-> Json<LoginResponse> {
 
+	let mut new_session = true;
 	let auth = match credentials {
 		Some(cred) => authenticate_creds(db, &cred.0).await,
-		None => authenticate_session(db, cookies).await,
+		None => {
+			new_session = false;
+			authenticate_session(db, cookies).await
+		},
 	};
 
 	Json(match auth {
@@ -42,7 +46,8 @@ pub async fn login(credentials: Option<Json<Credentials>>, cookies: &CookieJar<'
 			message: Some(err),
 		},
 		Ok(u) => {
-			update_session(db, cookies, &u).await;
+			if new_session { add_session(db, cookies, &u).await; }
+			else { update_session(db, cookies).await }
 			LoginResponse {
 				success: true,
 				user: Some(u),
@@ -140,7 +145,7 @@ async fn authenticate_creds(pool: &Pool<Sqlite>, creds: &Credentials) -> Result<
 	}
 }
 
-async fn update_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>, user: &User) -> () {
+async fn add_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>, user: &User) -> () {
 	let sessionid = random::<i64>();
 	cookies.add(("sessionid", sessionid.to_string()));
 
@@ -152,6 +157,22 @@ async fn update_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>, user: &Use
 		VALUES ($1, $2, $3);
 		",
 		sessionid, user.username, time
+	)
+	.fetch_one(pool)
+	.await;
+}
+
+async fn update_session(pool: &Pool<Sqlite>, cookies: &CookieJar<'_>) -> () {
+	let sessionid = get_sessionid(cookies);
+	let time = UNIX_EPOCH.elapsed().unwrap_or_default().as_secs() as i64;
+
+	let _ = sqlx::query!(
+		"
+		UPDATE sessions
+		SET time = ?
+		WHERE id = ?
+		",
+		time, sessionid
 	)
 	.fetch_one(pool)
 	.await;
