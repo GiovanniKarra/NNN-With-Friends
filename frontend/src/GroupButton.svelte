@@ -38,5 +38,6 @@
 		margin: 0;
 		border-radius: 0;
 		border-width: 0;
+		text-wrap: wrap;
 	}
 </style>

@@ -45,5 +45,5 @@ export async function signup(username: string, password: string): Promise<string
 
 export async function logout() {
 	let res = await fetch("/api/logout", {method: "POST"});
-	return res;
+	if (res.ok) pageState.update((s) => ({...s, user: ""}));
 }

@@ -22,6 +22,7 @@
 {#if creatingGroup}
 	<div class="duo">
 		<input type="text" bind:value={newGroupName}
+			maxlength="30"
 			on:keydown={(event) => pressedEnter(event, newGroup)}>
 		<button on:click={newGroup} style="width: 20%; padding-left: 16px;">
 			New

@@ -7,13 +7,13 @@
 	let errorMessage = "";
 
 	function goButton() {
-		(createAccount? signup(username, password): login(username, password))
-		.then((msg) => errorMessage = msg.toString())
+		(createAccount? signup(username, password).then(() => login(username, password)):
+		login(username, password)).then((msg) => errorMessage = msg.toString())
 	}
 </script>
 
 <div class="login-page">
-	<h1>LOGIN PAGE</h1>
+	<h1>LOGIN</h1>
 	<div class="login-form">
 		<form>
 			<label for="username">Username</label>

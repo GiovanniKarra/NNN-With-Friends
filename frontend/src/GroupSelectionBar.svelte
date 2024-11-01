@@ -43,6 +43,6 @@
 <style>
 	.group-selection-bar {
 		width: 20%;
-		/* background-color: gray; */
+		min-width: fit-content;
 	}
 </style>
