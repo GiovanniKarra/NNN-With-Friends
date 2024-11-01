@@ -47,12 +47,12 @@
 		align-items: center;
 		justify-content: center;
 		text-align: center;
-		width: 100%;
+		width: 100vw;
 	}
 	.fail-input {
 		display: flex;
 		flex-direction: row;
 		width: 100%;
-		padding-left: 35%;
+		max-width: 920px;
 	}
 </style>
