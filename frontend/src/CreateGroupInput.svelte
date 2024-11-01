@@ -1,20 +1,39 @@
 <script>
+    import { createGroup, joinGroup } from "./api";
     import { pressedEnter } from "./misc";
 
-	export let newGroup;
+	export let updateGroups;
 	let newGroupName = "";
 	let errorMsg = "";
+	let creatingGroup = false;
+
+	function newGroup() {
+		createGroup(newGroupName).then((result) => {
+			if (!result.success) errorMsg = result.groupid;
+			else joinGroup(result.groupid).then(() => {
+				creatingGroup = false;
+				updateGroups();
+			});
+		})
+	}
 </script>
 
-<div class="duo">
-	<input type="text" bind:value={newGroupName}
-		on:keydown={(event) => pressedEnter(event, newGroup)}>
-	<button on:click={newGroup} style="width: 20%; padding-left: 16px;">
-		New
+
+{#if creatingGroup}
+	<div class="duo">
+		<input type="text" bind:value={newGroupName}
+			on:keydown={(event) => pressedEnter(event, newGroup)}>
+		<button on:click={newGroup} style="width: 20%; padding-left: 16px;">
+			New
+		</button>
+	</div>
+	{#if errorMsg.length > 0}
+		<p>{errorMsg}</p>
+	{/if}
+{:else}
+	<button on:click={() => creatingGroup = true}>
+		+ Create
 	</button>
-</div>
-{#if errorMsg.length > 0}
-	<p>{errorMsg}</p>
 {/if}
 
 <style>
