@@ -38,7 +38,7 @@ export async function signup(username: string, password: string): Promise<string
 	if (jsonRes.success === false) {
 		return jsonRes.message;
 	} else {
-		return "";
+		return "Account created successfully";
 	}
 }
 

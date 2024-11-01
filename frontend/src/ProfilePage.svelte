@@ -17,16 +17,37 @@
 </script>
 
 <div class="profile-page">
-	{#if user.failed_time > 0}
+	{#if user.username.length > 0}
 		<h1>{user.username}</h1>
 		{#if user.failed}
 			<p>{failTimeToString(user.failed_time)}</p>
 			<p>This is what you had to say: {user.failed_msg}</p>
 		{:else}
-			<input type="text" placeholder="It was too hard :((" bind:value={failMessage}>
-			<button on:click={() => fail(failMessage).then((newStatus) => user = {...user, ...newStatus})}>
-				I failed
-			</button>
+			<div class="fail-input">
+				<input type="text" placeholder="It was too hard :((" bind:value={failMessage}
+					style="margin:0;" maxlength="80">
+				<button on:click={() =>
+					fail(failMessage).then((newStatus) => user = {...user, ...newStatus})}
+					style="margin:0;">
+					I failed
+				</button>
+			</div>
 		{/if}
 	{/if}
 </div>
+
+<style>
+	.profile-page {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+	}
+	.fail-input {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		padding-left: 35%;
+	}
+</style>

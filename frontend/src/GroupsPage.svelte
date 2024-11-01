@@ -21,6 +21,7 @@
 
 
 <div class="groups-page">
+	<p>Share the group's link to a friend to add them!</p>
 	<div class="vertical-split">
 		<GroupSelectionBar currentGroupID={arg}/>
 		<GroupDisplay currentGroupID={arg}/>
@@ -28,6 +29,9 @@
 </div>
 
 <style>
+	.groups-page {
+		text-align: center;
+	}
 	.vertical-split {
 		display: flex;
 		flex-direction: row;

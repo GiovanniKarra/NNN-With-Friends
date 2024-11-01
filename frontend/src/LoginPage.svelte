@@ -17,10 +17,12 @@
 	<div class="login-form">
 		<form>
 			<label for="username">Username</label>
-			<input type="text" placeholder="NNN-Enjoyer-69" required bind:value={username}/>
+			<input type="text" placeholder="NNN-Enjoyer-69" required bind:value={username}
+				on:keydown={(e) => pressedEnter(e, goButton)}/>
 			<label for="password">Password</label>
-			<input type="password" required bind:value={password}/>
-			<input type="button" on:click={goButton} on:keydown={(e) => pressedEnter(e, goButton)}
+			<input type="password" required bind:value={password}
+				on:keydown={(e) => pressedEnter(e, goButton)}/>
+			<input type="button" on:click={goButton}
 				value="{createAccount? "Sign Up": "Log In"}">
 			<input type="button" on:click={() => createAccount = !createAccount}
 				value="{createAccount? "Log in to an existing account": "Create a new account"}">

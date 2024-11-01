@@ -31,8 +31,8 @@
 	<div class="duo">
 		<input type="text" bind:value={newGroupName}
 			on:keydown={(event) => pressedEnter(event, newGroup)}>
-		<button on:click={newGroup} style="width: 20%;">
-			go
+		<button on:click={newGroup} style="width: 20%; padding-left: 16px;">
+			New
 		</button>
 	</div>
 		{#if errorMsg.length > 0}
