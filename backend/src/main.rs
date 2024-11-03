@@ -15,6 +15,7 @@ mod groups;
 use login::{login as login_route, signup, logout};
 use users::{fail, user_status};
 
+
 #[get("/<_path..>", rank = 11)]
 async fn index(_path: PathBuf) -> io::Result<NamedFile> {
 	let dir = env::var("FRONTEND_DIR").unwrap_or("./".to_owned());

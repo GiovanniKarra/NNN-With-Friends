@@ -13,7 +13,7 @@ export function successToString(failTimeSeconds: number): string {
 	let hoursLeft = hours % 24;
 	let days = Math.floor(hours/24);
 
-	return `Holding on since ${days} days and ${hoursLeft} hours.`
+	return `Holding on since ${days} days and ${hoursLeft} hours`
 }
 
 

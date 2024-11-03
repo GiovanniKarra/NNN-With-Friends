@@ -7,6 +7,7 @@ use rocket::{
 	State,
 };
 use sqlx::{Pool, Sqlite};
+use sha256::digest;
 
 use crate::users::{User, get_user};
 
@@ -96,12 +97,13 @@ pub async fn logout(cookies: &CookieJar<'_>, db: &State<Pool<Sqlite>>) -> Result
 }
 
 async fn add_user(pool: &Pool<Sqlite>, username: &String, password: &String) -> () {
+	let hashed_password = digest(password);
 	let _ = sqlx::query!(
 		"
 		INSERT INTO users (username, password)
 		VALUES ($1, $2);
 		",
-		username, password
+		username, hashed_password
 	)
 	.execute(pool)
 	.await;
@@ -135,7 +137,7 @@ async fn authenticate_creds(pool: &Pool<Sqlite>, creds: &Credentials) -> Result<
 
 	match user {
 		Some(u) => {
-			if creds.password == u.password {
+			if digest(&creds.password) == u.password {
 				Ok(User { username: u.username })
 			} else {
 				Err("Password incorrect".to_owned())

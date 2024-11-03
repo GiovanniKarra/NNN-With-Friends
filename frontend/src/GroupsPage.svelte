@@ -5,7 +5,7 @@
 
 
 <div class="groups-page">
-	<p>Share the group's link to a friend to add them!</p>
+	<p>Share the group's URL to a friend to add them!</p>
 	<div class="vertical-split">
 		<GroupSelectionBar/>
 		<GroupDisplay/>
